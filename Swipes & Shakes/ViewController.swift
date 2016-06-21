@@ -7,62 +7,48 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
-
+    
+    
+    var player: AVAudioPlayer = AVAudioPlayer()
+    
+    var sounds = ["balloon", "datsun", "jet", "whoopee"]
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
-        var swipeRight = UISwipeGestureRecognizer(target: self, action: "swiped:")
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        self.view.addGestureRecognizer(swipeRight)
         
-        var swipeUp = UISwipeGestureRecognizer(target: self, action: "swiped:")
-        swipeUp.direction = UISwipeGestureRecognizerDirection.Up
-        self.view.addGestureRecognizer(swipeUp)
-        
-    
-    
     }
     
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
         
         if event!.subtype == UIEventSubtype.MotionShake {
             
-            print("Device was shaken")
             
-        }
-        
-    }
-
-    func swiped(gesture: UIGestureRecognizer) {
-        
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            var randomNumber = Int(arc4random_uniform(UInt32(sounds.count)))
             
-            switch swipeGesture.direction {
+            var fileLocation = NSBundle.mainBundle().pathForResource(sounds[randomNumber], ofType: "mp3")
+            
+            do {
                 
-            case UISwipeGestureRecognizerDirection.Right:
-                print("Swiped Right")
-            
-            case UISwipeGestureRecognizerDirection.Up:
-                    print("Swiped Up")
-            default:
-                print()
-                
-                
-            }
-            
+                try player = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: fileLocation!))
+                player.play()
+            } catch {}
             
         }
         
     }
     
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 
